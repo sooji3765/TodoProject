@@ -17,6 +17,7 @@ import android.view.View
 import android.view.ViewGroup
 
 import android.widget.Toast
+import com.bumptech.glide.Glide
 
 import com.example.user.todoproject.R
 import com.example.user.todoproject.model.User
@@ -58,9 +59,12 @@ class ProfileFragment : Fragment() {
         realm = Realm.getDefaultInstance()
         val user = realm.where(User::class.java).equalTo("id",id).findAll()
         val email = user.get(0)!!.email.toString()
+        val image = user.get(0)!!.profileImage.toString()
 
         userID.text = id
         userEmail.text = email
+
+        Glide.with(this).load(image).into(imageButton)
 
         imageButton.setOnClickListener { showPictureDialog() }
 
@@ -71,7 +75,7 @@ class ProfileFragment : Fragment() {
 
         val pictureDialog = AlertDialog.Builder(context)
         pictureDialog.setTitle("Select Action")
-        val pictureDialogItem = arrayOf("갤러리","카메라")
+        val pictureDialogItem = arrayOf("카메라","갤러리")
         pictureDialog.setItems(pictureDialogItem){
             dialog, which ->
             when(which){
@@ -107,6 +111,12 @@ class ProfileFragment : Fragment() {
                 try {
                     val bitmap = MediaStore.Images.Media.getBitmap(activity!!.contentResolver,contentURI)
                     val path = saveImage(bitmap)
+
+                    Log.i("imgaePath",path)
+                    realm.executeTransaction {
+                        val user = realm.where(User::class.java).equalTo("id",id).findFirst()
+                        user!!.profileImage = path
+                    }
                     Toasty.success(this.context!!,"성공",Toast.LENGTH_SHORT).show()
                     imageButton.setImageBitmap(bitmap)
 

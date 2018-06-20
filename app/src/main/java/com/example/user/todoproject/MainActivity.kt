@@ -10,11 +10,14 @@ import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import com.bumptech.glide.Glide
 import com.example.user.todoproject.model.User
 import com.example.user.todoproject.view.ProfileFragment
 import com.example.user.todoproject.view.TodoFragment
+
 import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_main.view.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.nav_header_main.view.*
 
@@ -22,6 +25,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     lateinit var realm: Realm
     lateinit var id : String
+    var todoFragment=TodoFragment()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -30,8 +34,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         id = intent.getStringExtra("id")
 
         val fragmentTransaction  = supportFragmentManager.beginTransaction()
-       
-        fragmentTransaction.add(R.id.fragment,TodoFragment(),id).commit()
+        val bundle = Bundle(1)
+        bundle.putString("id",id)
+
+        todoFragment.arguments = bundle
+
+        fragmentTransaction.add(R.id.fragment,todoFragment,id).commit()
 
         realm = Realm.getDefaultInstance()
         val user = realm.where(User::class.java).equalTo("id", id).findAll()
@@ -39,6 +47,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
 
         val nav_header_view: View = nav_view.getHeaderView(0)
+        val userImage = user.get(0)!!.profileImage.toString()
+
+        // 이미지 설정
+        if(userImage==""){
+            Glide.with(this).load(R.mipmap.ic_launcher_round)
+                    .into(nav_header_view.nav_image)
+        }else{
+            Glide.with(this).load(userImage)
+                    .into(nav_header_view.nav_image)
+        }
 
         nav_header_view.nav_id.text = "${user.get(0)!!.id.toString()}"
         nav_header_view.nav_email.text = "${user.get(0)!!.email.toString()}"
@@ -97,7 +115,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private fun replaceFragment(fragment: Fragment) {
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
-
         val bundle = Bundle(1)
         bundle.putString("id",id)
         fragment.arguments = bundle

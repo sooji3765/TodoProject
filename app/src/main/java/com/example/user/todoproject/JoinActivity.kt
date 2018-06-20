@@ -198,6 +198,7 @@ class JoinActivity : AppCompatActivity() {
             user.email = emailText.text.toString().trim()
             user.id = idText.text.toString().trim()
             user.password = passText.text.toString().trim()
+            user.profileImage=""
 
             Log.v("user infomation", "${user.email}")
             realm.commitTransaction()

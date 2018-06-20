@@ -10,7 +10,7 @@ class MyApplication : Application() {
 
         Realm.init(this)
         var realmConfiguration = RealmConfiguration.Builder()
-                .name("todo.realm")
+                .name("todo2.realm")
                 .build()
 
         Realm.setDefaultConfiguration(realmConfiguration)

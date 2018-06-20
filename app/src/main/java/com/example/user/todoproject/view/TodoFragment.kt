@@ -32,10 +32,15 @@ private const val ARG_PARAM2 = "param2"
 class TodoFragment : Fragment() {
 
     var id:String?=null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        id = arguments!!.getString("id")
+    }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
 
-        id = arguments!!.getString("id")
+
         return inflater.inflate(R.layout.fragment_todo, container, false)
         // Inflate the layout for this fragment
 
@@ -45,7 +50,6 @@ class TodoFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         textTitle.text = id
     }
-
 
 
 }

@@ -10,6 +10,7 @@ open class User : RealmObject() {
     open var id: String? = null
     open var email: String? = null
     open var password: String? = null
+    open var profileImage : String?= null
 
 }
 
