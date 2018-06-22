@@ -6,12 +6,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".view.TodoFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:id="@+id/textTitle"
-        android:layout_width="92dp"
-        android:layout_height="33dp"
-        android:text="TextView" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycleview"

@@ -1,12 +1,16 @@
 package com.example.user.todoproject
 
 import android.app.FragmentManager
+import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.support.design.widget.NavigationView
 import android.support.v4.app.Fragment
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -49,12 +53,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val nav_header_view: View = nav_view.getHeaderView(0)
         val userImage = user.get(0)!!.profileImage.toString()
 
+        Log.i("MainPhoto",userImage)
         // 이미지 설정
         if(userImage==""){
             Glide.with(this).load(R.mipmap.ic_launcher_round)
                     .into(nav_header_view.nav_image)
         }else{
-            Glide.with(this).load(userImage)
+            val uri = Uri.parse(userImage)
+            Glide.with(this)
+                    .load(uri)
                     .into(nav_header_view.nav_image)
         }
 

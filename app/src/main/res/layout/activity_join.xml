@@ -65,6 +65,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Password"
+            android:inputType="textPassword"
             android:textColor="@android:color/background_light" />
     </android.support.design.widget.TextInputLayout>
 
@@ -86,6 +87,7 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:hint="hint"
+            android:inputType="textPassword"
             android:textColor="@android:color/background_light" />
     </android.support.design.widget.TextInputLayout>
 

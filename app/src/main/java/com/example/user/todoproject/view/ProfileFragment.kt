@@ -7,6 +7,7 @@ import android.graphics.Bitmap
 import android.graphics.Camera
 import android.util.*
 import android.media.MediaScannerConnection
+import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
@@ -24,6 +25,7 @@ import com.example.user.todoproject.model.User
 import es.dmoral.toasty.Toasty
 import io.realm.Realm
 import kotlinx.android.synthetic.main.fragment_profile.*
+import kotlinx.android.synthetic.main.nav_header_main.view.*
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
@@ -64,7 +66,15 @@ class ProfileFragment : Fragment() {
         userID.text = id
         userEmail.text = email
 
-        Glide.with(this).load(image).into(imageButton)
+        Log.i("ProfilePhoto",image)
+        // 이미지 설정
+        if(image==""){
+            Glide.with(this).load(R.mipmap.ic_launcher_round).into(imageButton)
+
+        }else{
+            val uri = Uri.parse(image)
+            Glide.with(this).load(uri).into(imageButton)
+        }
 
         imageButton.setOnClickListener { showPictureDialog() }
 
@@ -91,7 +101,7 @@ class ProfileFragment : Fragment() {
     private fun takePhotoFromCamera() {
 
         val galleryIntent = Intent(Intent.ACTION_PICK
-        , MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+                , MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         startActivityForResult(galleryIntent,GALLERY)
 
     }
@@ -113,12 +123,14 @@ class ProfileFragment : Fragment() {
                     val path = saveImage(bitmap)
 
                     Log.i("imgaePath",path)
-                    realm.executeTransaction {
-                        val user = realm.where(User::class.java).equalTo("id",id).findFirst()
-                        user!!.profileImage = path
-                    }
-                    Toasty.success(this.context!!,"성공",Toast.LENGTH_SHORT).show()
-                    imageButton.setImageBitmap(bitmap)
+                    realm.beginTransaction()
+                    Log.i("이미지저장----------------->",path)
+                    val user = realm.where(User::class.java).equalTo("id",id).findFirst()
+                    user!!.profileImage = contentURI.toString()
+                    realm.commitTransaction()
+                    Toasty.success(this.context!!,"갤러리 저장성공",Toast.LENGTH_SHORT).show()
+                    Log.i("ProfilePhoto",user!!.profileImage)
+                    Glide.with(this).load(bitmap).into(imageButton)
 
                 }catch (e: IOException){
                     e.printStackTrace()

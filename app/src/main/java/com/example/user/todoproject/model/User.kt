@@ -11,7 +11,6 @@ open class User : RealmObject() {
     open var email: String? = null
     open var password: String? = null
     open var profileImage : String?= null
-
 }
 
 open class Todo : RealmObject() {
@@ -20,5 +19,6 @@ open class Todo : RealmObject() {
     open var content: String? = null
     open var date: String? = null
     open var id: String? = null
+    open var checkbox : Boolean = false
 
 }
